@@ -45,7 +45,32 @@ plot(simplify(state_graph_GunControl))
 # From the above finding we can see that not all the candidates spoke about the Gun Control issues
 
 
+# Group candidates based on Sentiments( Positive , Negative or Neautral) from general public tweets.
+#Creating adjacency List for Adoption subject Matter
+adj_list_abortion_sentiment_sm = readcsv_normalized_abortion_sm %>% group_by(sentiment) %>% do(create_adj_list(.))
+state_graph_abortion_sentiments = graph.data.frame(adj_list_abortion_sentiment_sm[, c("X1", "X2")], directed = FALSE)
+
+# Assigning edge colors based on sentiments ( Green for Positive, Red for Negative and Yellow for Neutral)
+
+E(state_graph_abortion_sentiments)$color=
+ifelse(adj_list_abortion_sentiment_sm$sentiment=="Positive","Green",
+                                                 ifelse(adj_list_abortion_sentiment_sm$sentiment=="Negative","Red",
+                                                       "Yellow"))
+
+plot(state_graph_abortion_sentiments, layout=layout.fruchterman.reingold)
+plot(simplify(state_graph_abortion_sentiments))
 
 
+#Creating adjacency List for Racial Issues subject Matter
+adj_list_racialissues_sentiment_sm = readcsv_normalized_Racialissues_sm %>% group_by(sentiment) %>% do(create_adj_list(.))
+state_graph_racialissues_sentiments = graph.data.frame(adj_list_racialissues_sentiment_sm[, c("X1", "X2")], directed = FALSE)
 
+# Assigning edge colors based on sentiments ( Green for Positive, Red for Negative and Yellow for Neutral)
+
+E(state_graph_racialissues_sentiments)$color=
+  ifelse(adj_list_racialissues_sentiment_sm$sentiment=="Positive","Green",
+         ifelse(adj_list_racialissues_sentiment_sm$sentiment=="Negative","Red",
+                "Yellow"))
+
+plot(state_graph_racialissues_sentiments, layout=layout.fruchterman.reingold)
 
