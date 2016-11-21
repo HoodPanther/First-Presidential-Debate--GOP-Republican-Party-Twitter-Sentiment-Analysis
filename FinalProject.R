@@ -28,6 +28,8 @@ create_adj_list = function(df){
 #Creating adjacency List for Adoption subject Matter
 adj_list_abortion_sm = readcsv_normalized_abortion_sm %>% group_by(subject_matter) %>% do(create_adj_list(.))
 state_graph_abortion = graph.data.frame(adj_list_abortion_sm[, c("X1", "X2")], directed = FALSE)
+
+
 plot(state_graph_abortion, layout=layout.fruchterman.reingold)
 plot(simplify(state_graph_abortion))
 
@@ -37,9 +39,11 @@ state_graph_racialissues = graph.data.frame(adj_list_RacialIssues_sm[, c("X1", "
 plot(state_graph_racialissues, layout=layout.fruchterman.reingold)
 plot(simplify(state_graph_racialissues))
 
+
 #Creating adjacency List for Gun Control subject Matter
 adj_list_GunControl_sm = readcsv_normalized_GunControl_sm %>% group_by(subject_matter) %>% do(create_adj_list(.))
 state_graph_GunControl = graph.data.frame(adj_list_GunControl_sm[, c("X1", "X2")], directed = FALSE)
+degree(state_graph_GunControl)
 plot(state_graph_GunControl, layout=layout.fruchterman.reingold)
 plot(simplify(state_graph_GunControl))
 # From the above finding we can see that not all the candidates spoke about the Gun Control issues
@@ -56,8 +60,10 @@ E(state_graph_abortion_sentiments)$color=
 ifelse(adj_list_abortion_sentiment_sm$sentiment=="Positive","Green",
                                                  ifelse(adj_list_abortion_sentiment_sm$sentiment=="Negative","Red",
                                                        "Yellow"))
-
-plot(state_graph_abortion_sentiments, layout=layout.fruchterman.reingold)
+#Finding Degree of graph and depending upon degree we can change vertex size
+degree(state_graph_abortion_sentiments)
+V(state_graph_abortion_sentiments)$vertex_degree <-  degree(state_graph_abortion_sentiments)
+plot(state_graph_abortion_sentiments, layout=layout.fruchterman.reingold,vertex.size=V(state_graph_abortion_sentiments)$vertex_degree)
 plot(simplify(state_graph_abortion_sentiments))
 
 
@@ -71,6 +77,10 @@ E(state_graph_racialissues_sentiments)$color=
   ifelse(adj_list_racialissues_sentiment_sm$sentiment=="Positive","Green",
          ifelse(adj_list_racialissues_sentiment_sm$sentiment=="Negative","Red",
                 "Yellow"))
+#Finding Degree of graph and depending upon degree we can change vertex size
+degree(state_graph_racialissues_sentiments)
+V(state_graph_racialissues_sentiments)$vertex_degree <-  degree(state_graph_racialissues_sentiments)
+degree(state_graph_racialissues_sentiments)
+plot(state_graph_racialissues_sentiments, layout=layout.fruchterman.reingold,vertex.size=V(state_graph_racialissues_sentiments)$vertex_degree)
 
-plot(state_graph_racialissues_sentiments, layout=layout.fruchterman.reingold)
 
